@@ -11,12 +11,11 @@
 #import <Foundation/Foundation.h>
 
 #import <string>
-#import <iostream>
 
 #import "opencv2/photo.hpp"
-#include <opencv2/dnn.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
+#import <opencv2/dnn.hpp>
+#import <opencv2/imgproc.hpp>
+#import <opencv2/highgui.hpp>
 #import <opencv2/imgcodecs/ios.h>
 
 
@@ -56,7 +55,7 @@ using namespace cv::dnn;
 -(void)setImg:(UIImage*) img {
     UIImageToMat(img, mat);
     
-    // Check if image is grayscale or "grayscale" (actually color), and conver to BGR.
+    // Check if image is grayscale or "grayscale" (actually color), and convert to BGR.
     if (mat.channels() == 1) {
         cvtColor(mat, mat, CV_GRAY2BGR);
     } else if (mat.channels() == 4) {
