@@ -24,10 +24,27 @@ using namespace cv;
 using namespace cv::dnn;
 
 
-@implementation ImageUtils {}
-
+@implementation ImageUtils {
+    Net net;
+}
+    
 -(id)init {
-    if ( self = [super init] ) {}
+    if ( self = [super init] ) {
+    
+        // Define what models to read
+        NSString *protoFileName = [[NSBundle mainBundle] pathForResource:@"colorization_deploy_v2" ofType:@"prototxt"];
+        const char* protoCString = [protoFileName UTF8String];
+        
+        NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"colorization_release_v2" ofType:@"caffemodel"];
+        const char* modelFileNameCString = [modelFileName UTF8String];
+        
+        std::string modelTxt = std::string(protoCString);
+        std::string modelBin = std::string(modelFileNameCString);
+        
+        // Initialize net
+        net = readNetFromCaffe(modelTxt, modelBin);
+        net.setPreferableTarget(cv::dnn::DNN_TARGET_OPENCL);
+    }
     
     return self;
 }
@@ -39,6 +56,7 @@ using namespace cv::dnn;
 -(void)setImg:(UIImage*) img {
     UIImageToMat(img, mat);
     
+    // Check if image is grayscale or "grayscale" (actually color), and conver to BGR.
     if (mat.channels() == 1) {
         cvtColor(mat, mat, CV_GRAY2BGR);
     } else if (mat.channels() == 4) {
@@ -79,24 +97,10 @@ using namespace cv::dnn;
         -90., -80., -70., -60., -50., -40., -30., -20., -10., 0., 10., 20., 30., 40., 50., 60., 70., 80., -110., -100., -90., -80., -70.,
         -60., -50., -40., -30., -20., -10., 0., 10., 20., 30., 40., 50., 60., 70., -110., -100., -90., -80., -70., -60., -50., -40., -30.,
         -20., -10., 0., 10., 20., 30., 40., 50., 60., 70., -90., -80., -70., -60., -50., -40., -30., -20., -10., 0.};
-    
-    NSString *protoFileName = [[NSBundle mainBundle] pathForResource:@"colorization_deploy_v2" ofType:@"prototxt"];
-    const char* protoCString = [protoFileName UTF8String];
-    
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"colorization_release_v2" ofType:@"caffemodel"];
-    const char* modelFileNameCString = [modelFileName UTF8String];
-    
-    std::string modelTxt = std::string(protoCString);
-    std::string modelBin = std::string(modelFileNameCString);
-    
-    bool useOpenCL = true;
-    
+        
     // fixed input size for the pretrained network
     const int W_in = 224;
     const int H_in = 224;
-    Net net = readNetFromCaffe(modelTxt, modelBin);
-    if (useOpenCL)
-        net.setPreferableTarget(cv::dnn::DNN_TARGET_OPENCL);
     
     // setup additional layers:
     int sz[] = {2, 313, 1, 1};
