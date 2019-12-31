@@ -31,6 +31,8 @@ To make Xcode understand that the framework exists, see the images below:
 <img src="./images/opencv1.png" width="1000"/>
 <img src="./images/opencv2.png" width="1000"/>
 
+Finally, the Caffe-model has to be downloaded. [Clone this repository](https://github.com/richzhang/colorization#representation-learning-centric-functionality) and run `./models/fetch_release_models.sh` inside that repo. Find `colorization_release_v2.caffemodel` and put it in the root of `Colorizer-iOS`, tick "Copy items if needed".
+
 ## Interface
 To scan and crop photos with the built in camera is out of the scope for this app. There are other apps available in the App Store for that purpose, [PhotoScan by Google Photos](https://apps.apple.com/us/app/photoscan-by-google-photos/id1165525994) for instance.
 
