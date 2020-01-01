@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "11C05B0E23BA55070039A45D"
-               BuildableName = "Colorizer_iOS.app"
+               BuildableName = "Colorizer.app"
                BlueprintName = "Colorizer_iOS"
                ReferencedContainer = "container:Colorizer_iOS.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "11C05B0E23BA55070039A45D"
-            BuildableName = "Colorizer_iOS.app"
+            BuildableName = "Colorizer.app"
             BlueprintName = "Colorizer_iOS"
             ReferencedContainer = "container:Colorizer_iOS.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "11C05B0E23BA55070039A45D"
-            BuildableName = "Colorizer_iOS.app"
+            BuildableName = "Colorizer.app"
             BlueprintName = "Colorizer_iOS"
             ReferencedContainer = "container:Colorizer_iOS.xcodeproj">
          </BuildableReference>
