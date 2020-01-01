@@ -12,16 +12,12 @@
 
 #import <string>
 
-#import "opencv2/photo.hpp"
+#import <opencv2/photo.hpp>
 #import <opencv2/dnn.hpp>
-#import <opencv2/imgproc.hpp>
-#import <opencv2/highgui.hpp>
 #import <opencv2/imgcodecs/ios.h>
-
 
 using namespace cv;
 using namespace cv::dnn;
-
 
 @implementation ImageUtils {
     Net net;
@@ -29,8 +25,7 @@ using namespace cv::dnn;
     
 -(id)init {
     if ( self = [super init] ) {
-    
-        // Define what models to read
+        // Define what files to read
         NSString *protoFileName = [[NSBundle mainBundle] pathForResource:@"colorization_deploy_v2" ofType:@"prototxt"];
         const char* protoCString = [protoFileName UTF8String];
         
@@ -129,7 +124,7 @@ using namespace cv::dnn;
     resize(a, a, mat.size());
     resize(b, b, mat.size());
     
-    // merge, and convert back to BGR
+    // merge, and convert back to RGB
     Mat color, chn[] = {L, a, b};
     merge(chn, 3, lab);
     cvtColor(lab, color, COLOR_Lab2RGB);

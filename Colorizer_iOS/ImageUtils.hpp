@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-#import "opencv2/core.hpp"
+#import <opencv2/core.hpp>
 
 @interface ImageUtils : NSObject {
     cv::Mat mat;
