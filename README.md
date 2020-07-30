@@ -70,3 +70,9 @@ Tap on the screen to open the camera roll and choose a photo. The arrow becomes 
   <img src="./images/example4_gray.png" width="300" />
   <img src="./images/example4_color.png" width="300" /> 
 </p>
+
+## Donations
+
+Paypal
+
+![Paypal](images/QR-kod.png)
