@@ -19,11 +19,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var actionButton: UIBarButtonItem!
     @IBOutlet weak var playButton: UIBarButtonItem!
     @IBOutlet weak var movieBar: UIToolbar!
+    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var statusLabel: UILabel!
     
     var imageColor: UIImage!
     var imageGray: UIImage!
     var movieUrl: URL!
-    var movieSelected: Bool!
+    var movieSelected = false
     var playerLayer: AVPlayerViewController!
     var frames:[UIImage]!
     var generator:AVAssetImageGenerator!
@@ -34,7 +36,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        movieSelected = false
     }
     
     /**
@@ -61,31 +62,57 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBAction func onColorizeSwap(_ sender: UIBarButtonItem) {
         
         if self.movieSelected {
-            getAllFrames()
+            self.progressView.setProgress(0.0, animated: false)
+            self.progressView.isHidden = false
+            self.statusLabel.isHidden = false
+            
+            self.getAllFrames()
+            var progress:Float = 0
+            let total = Float(frames.count)
+            var counter = 0
             var colorImages = [UIImage]()
-
-            for im in frames {
-                let colorIm = colorizer.colorizeImage(im)
-                colorImages.append(colorIm!)
+            
+            let timer = Timer(timeInterval: 0.1, repeats: true) {
+                (timer) in
+                
+                if progress < total {
+                    progress += 1.0
+                    self.progressView.setProgress(progress / total, animated: true)
+                    
+                    let im = self.frames[counter]
+                    let colorIm = self.colorizer.colorizeImage(im)
+                    colorImages.append(colorIm!)
+                    
+                    counter += 1
+                    
+                } else {
+                    timer.invalidate()
+                    
+                    self.imageView.animationImages = colorImages
+                    self.imageView.animationDuration = self.duration
+                    self.imageView.animationRepeatCount = 1
+                    self.imageView.image = self.imageView.animationImages?.first
+                    self.playButton.isEnabled = true
+                    self.actionButton.isEnabled = false
+                    self.colorizeButton.isEnabled = false
+                    self.progressView.isHidden = true
+                    self.statusLabel.isHidden = true
+                }
             }
             
-            imageView.animationImages = colorImages
-            imageView.animationDuration = self.duration
-            imageView.animationRepeatCount = 1
-            imageView.image = imageView.animationImages?.first
-            playButton.isEnabled = true
+            RunLoop.main.add(timer, forMode: .default)
             
         } else {
             let image:UIImage = imageView.image!
             let colorIm = colorizer.colorizeImage(image)
             
-            imageView.image = colorIm;
-            imageColor = colorIm
+            self.imageView.image = colorIm;
+            self.imageColor = colorIm
             
-            segment.isEnabled = true
-            segment.isHidden = false
-            actionButton.isEnabled = true
-            colorizeButton.isEnabled = false
+            self.segment.isEnabled = true
+            self.segment.isHidden = false
+            self.actionButton.isEnabled = true
+            self.colorizeButton.isEnabled = false
         }
     }
     
@@ -103,19 +130,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    /**
+     Changes the frame rate when the stepper value is changed. Happens when the stepper is tapped + or -.
+     - parameter sender: UIStepper
+     */
     @IBAction func onStepperValueChange(_ sender: UIStepper) {
         let stepperValue = Int(sender.value)
-        self.frameRate = 1.0 / sender.value
         let stepperValueStr = String(stepperValue)
         let title = "New animation frame rate: " + stepperValueStr
+        let message = "Using a higher frame rate will take longer time to generate animation."
         self.playButton.isEnabled = false
+        self.colorizeButton.isEnabled = true
+        self.frameRate = 1.0 / sender.value
         
-        let alert = UIAlertController(title: title, message: "Using a higher frame rate will make generating animation slower.", preferredStyle: .alert)
-
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
         self.present(alert, animated: true, completion: nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                alert.dismiss(animated: true, completion: nil)
-            }
+            alert.dismiss(animated: true, completion: nil)
+        }
     }
     
     /**
@@ -129,6 +162,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    /**
+     Starts playing the animation.
+     - parameter sender: UIBarButtonItem
+     */
     @IBAction func onPlayMovie(_ sender: Any) {
         if movieSelected {
             imageView.startAnimating()
@@ -145,21 +182,29 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         if mediaType.isEqual(to: kUTTypeImage as String) {
             let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-            imageView.image = image
-            movieBar.isHidden = true
-            imageGray = image
-            
-            segment.isHidden = true
-            segment.isEnabled = false
-            actionButton.isEnabled = false
-            imageView.contentMode = .scaleAspectFill
             self.dismiss(animated: true, completion: nil)
-        }
-        if mediaType.isEqual(to: kUTTypeMovie as String) {
-            movieUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL
-            movieSelected = true
-            imageView.contentMode = .scaleAspectFit
-            movieBar.isHidden = false
+            self.imageView.contentMode = .scaleAspectFill
+            self.imageView.image = image
+            
+            self.movieBar.isHidden = true
+            self.movieSelected = false
+            
+            self.imageGray = image
+            
+            self.segment.isHidden = true
+            self.segment.isEnabled = false
+            self.actionButton.isEnabled = false
+        
+        } else if mediaType.isEqual(to: kUTTypeMovie as String) {
+            self.imageView.image = nil
+            self.imageView.contentMode = .scaleAspectFit
+            
+            self.movieBar.isHidden = false
+            self.movieSelected = true
+            self.playButton.isEnabled = false
+
+            self.movieUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL
+    
         }
         colorizeButton.isEnabled = true
     }
@@ -172,7 +217,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.dismiss(animated: true, completion: nil)
     }
     
-
+    
     // https://stackoverflow.com/questions/42665271/swift-get-all-frames-from-video
     func getAllFrames() {
         let asset:AVAsset = AVAsset(url: movieUrl)
@@ -185,7 +230,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         for index in stride(from: 0, to: self.duration, by: self.frameRate) {
             self.getFrame(fromTime:Float64(index))
         }
-                
+        
         self.generator = nil
     }
     

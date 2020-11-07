@@ -72,6 +72,18 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="71r-H2-Pzf">
+                                <rect key="frame" x="20" y="726" width="374" height="1"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <color key="tintColor" systemColor="systemBlueColor"/>
+                            </progressView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Computing color images..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PGP-Fc-lVQ">
+                                <rect key="frame" x="67" y="734" width="281" height="16"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -86,7 +98,9 @@
                         <outlet property="imageView" destination="bGB-Ss-hYb" id="LfB-Y4-BC1"/>
                         <outlet property="movieBar" destination="9gN-tm-EnA" id="28n-9p-GMa"/>
                         <outlet property="playButton" destination="ChC-G8-L5f" id="5Jy-0x-sCA"/>
+                        <outlet property="progressView" destination="71r-H2-Pzf" id="6Gr-C2-Fb1"/>
                         <outlet property="segment" destination="V4p-Ln-O47" id="8HQ-L8-OFN"/>
+                        <outlet property="statusLabel" destination="PGP-Fc-lVQ" id="DdN-df-Ebe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -105,6 +119,9 @@
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
