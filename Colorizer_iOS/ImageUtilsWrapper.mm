@@ -6,10 +6,10 @@
 //  Copyright © 2019 Alexander Karlsson. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ImageUtilsWrapper.hpp"
 #import "ImageUtils.hpp"
-#import <iostream>
+
+#import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <Vision/Vision.h>
 

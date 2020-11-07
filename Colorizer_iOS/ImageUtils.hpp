@@ -19,7 +19,17 @@
     cv::Mat mat;
 }
 
--(UIImage*)colorize ;
+/**
+ \brief Converts a single grayscale image to a color image.
+ \link https://docs.opencv.org/3.4/d6/d39/samples_2dnn_2colorization_8cpp-example.html
+ \return A colorized image.
+ */
+-(UIImage*)colorize;
+
+/**
+ \brief Sets the the image to use when converting a single grayscale image.
+ \param[in] img A grayscale image.
+ */
 -(void)setImg:(UIImage*) img;
 
 @end

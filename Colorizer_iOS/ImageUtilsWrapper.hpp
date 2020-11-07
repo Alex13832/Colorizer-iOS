@@ -14,6 +14,10 @@
 
 @interface ImageUtilsWrapper : NSObject
 
+/**
+ \brief Converts a grayscale image to color.
+ \return A colorized image.
+ */
 -(UIImage*)colorizeImage:(UIImage*)img;
 
 @end

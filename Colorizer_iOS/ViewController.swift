@@ -105,7 +105,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             print(frames.count)
             
             var colorImages = [UIImage]()
-            
+
             for im in frames {
                 let colorIm = colorizer.colorizeImage(im)
                 colorImages.append(colorIm!)
@@ -116,7 +116,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageView.animationRepeatCount = 1
             imageView.image = imageView.animationImages?.first
             imageView.startAnimating()
-            imageView.contentMode = .scaleAspectFit
         }
     }
     
@@ -138,6 +137,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             segment.isEnabled = false
             actionButton.isEnabled = false
             colorizeButton.isEnabled = true
+            imageView.contentMode = .scaleAspectFill
             self.dismiss(animated: true, completion: nil)
         }
         
@@ -145,6 +145,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             movieUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL
             movieSelected = true
             movieBar.isHidden = false
+            imageView.contentMode = .scaleAspectFit
         }
     }
     
