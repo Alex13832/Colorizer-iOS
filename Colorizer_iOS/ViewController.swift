@@ -20,16 +20,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var playButton: UIBarButtonItem!
     @IBOutlet weak var movieBar: UIToolbar!
     
-    
     var imageColor: UIImage!
     var imageGray: UIImage!
     var movieUrl: URL!
     var movieSelected: Bool!
     var playerLayer: AVPlayerViewController!
-    let colorizer = ImageUtilsWrapper();
     var frames:[UIImage]!
     var generator:AVAssetImageGenerator!
     var duration: Float64!
+    var frameRate = 1.0
+    let colorizer = ImageUtilsWrapper();
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,16 +59,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
      - parameter sender: UIBarButtonItem
      */
     @IBAction func onColorizeSwap(_ sender: UIBarButtonItem) {
-        let image:UIImage = imageView.image!
-        let colorIm = colorizer.colorizeImage(image)
         
-        imageView.image = colorIm;
-        imageColor = colorIm
-        
-        segment.isEnabled = true
-        segment.isHidden = false
-        actionButton.isEnabled = true
-        colorizeButton.isEnabled = false
+        if self.movieSelected {
+            getAllFrames()
+            var colorImages = [UIImage]()
+
+            for im in frames {
+                let colorIm = colorizer.colorizeImage(im)
+                colorImages.append(colorIm!)
+            }
+            
+            imageView.animationImages = colorImages
+            imageView.animationDuration = self.duration
+            imageView.animationRepeatCount = 1
+            imageView.image = imageView.animationImages?.first
+            playButton.isEnabled = true
+            
+        } else {
+            let image:UIImage = imageView.image!
+            let colorIm = colorizer.colorizeImage(image)
+            
+            imageView.image = colorIm;
+            imageColor = colorIm
+            
+            segment.isEnabled = true
+            segment.isHidden = false
+            actionButton.isEnabled = true
+            colorizeButton.isEnabled = false
+        }
     }
     
     /**
@@ -85,6 +103,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    @IBAction func onStepperValueChange(_ sender: UIStepper) {
+        let stepperValue = Int(sender.value)
+        self.frameRate = 1.0 / sender.value
+        let stepperValueStr = String(stepperValue)
+        let title = "New animation frame rate: " + stepperValueStr
+        self.playButton.isEnabled = false
+        
+        let alert = UIAlertController(title: title, message: "Using a higher frame rate will make generating animation slower.", preferredStyle: .alert)
+
+        self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                alert.dismiss(animated: true, completion: nil)
+            }
+    }
+    
     /**
      Reacts when the action button is pressed, this whill open the "share" menu where the user can chose to e.g. save the result.
      - parameter sender: UIBarButtonItem
@@ -98,23 +131,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func onPlayMovie(_ sender: Any) {
         if movieSelected {
-            let player = AVPlayer(url: movieUrl)
-            let playerViewController = AVPlayerViewController()
-            playerViewController.player = player
-            getAllFrames()
-            print(frames.count)
-            
-            var colorImages = [UIImage]()
-
-            for im in frames {
-                let colorIm = colorizer.colorizeImage(im)
-                colorImages.append(colorIm!)
-            }
-            
-            imageView.animationImages = colorImages
-            imageView.animationDuration = self.duration
-            imageView.animationRepeatCount = 1
-            imageView.image = imageView.animationImages?.first
             imageView.startAnimating()
         }
     }
@@ -136,17 +152,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             segment.isHidden = true
             segment.isEnabled = false
             actionButton.isEnabled = false
-            colorizeButton.isEnabled = true
             imageView.contentMode = .scaleAspectFill
             self.dismiss(animated: true, completion: nil)
         }
-        
         if mediaType.isEqual(to: kUTTypeMovie as String) {
             movieUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL
             movieSelected = true
-            movieBar.isHidden = false
             imageView.contentMode = .scaleAspectFit
+            movieBar.isHidden = false
         }
+        colorizeButton.isEnabled = true
     }
     
     /**
@@ -167,7 +182,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.generator.appliesPreferredTrackTransform = true
         self.frames = []
         
-        for index in stride(from: 0, to: self.duration, by: 0.25) {
+        for index in stride(from: 0, to: self.duration, by: self.frameRate) {
             self.getFrame(fromTime:Float64(index))
         }
                 
