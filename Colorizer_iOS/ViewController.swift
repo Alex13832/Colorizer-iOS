@@ -8,23 +8,35 @@
 
 import UIKit
 import MobileCoreServices
+import AVFoundation
+import AVKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var colorizeButton: UIBarButtonItem!
     @IBOutlet weak var segment: UISegmentedControl!
     @IBOutlet weak var actionButton: UIBarButtonItem!
+    @IBOutlet weak var playButton: UIBarButtonItem!
+    @IBOutlet weak var movieBar: UIToolbar!
+    
     
     var imageColor: UIImage!
     var imageGray: UIImage!
+    var movieUrl: URL!
+    var movieSelected: Bool!
+    var playerLayer: AVPlayerViewController!
     let colorizer = ImageUtilsWrapper();
+    var frames:[UIImage]!
+    var generator:AVAssetImageGenerator!
+    var duration: Float64!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        movieSelected = false
     }
-
+    
     /**
      Reacts when user taps on the screen, this will trigger opening the camera roll.
      - parameter sender: Any
@@ -36,12 +48,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
-            imagePicker.mediaTypes = [kUTTypeImage as String]
+            imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
             imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
         }
     }
-
+    
     /**
      Reacts when the arrow-button is pressed. This will call functions (in Objectiv-C++) to colorize the chose image.
      - parameter sender: UIBarButtonItem
@@ -84,6 +96,30 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    @IBAction func onPlayMovie(_ sender: Any) {
+        if movieSelected {
+            let player = AVPlayer(url: movieUrl)
+            let playerViewController = AVPlayerViewController()
+            playerViewController.player = player
+            getAllFrames()
+            print(frames.count)
+            
+            var colorImages = [UIImage]()
+            
+            for im in frames {
+                let colorIm = colorizer.colorizeImage(im)
+                colorImages.append(colorIm!)
+            }
+            
+            imageView.animationImages = colorImages
+            imageView.animationDuration = self.duration
+            imageView.animationRepeatCount = 1
+            imageView.image = imageView.animationImages?.first
+            imageView.startAnimating()
+            imageView.contentMode = .scaleAspectFit
+        }
+    }
+    
     /**
      Opens the camera roll and gets the selected image.
      - parameter picker: UIImagePickerController
@@ -95,14 +131,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if mediaType.isEqual(to: kUTTypeImage as String) {
             let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
             imageView.image = image
+            movieBar.isHidden = true
             imageGray = image
+            
+            segment.isHidden = true
+            segment.isEnabled = false
+            actionButton.isEnabled = false
+            colorizeButton.isEnabled = true
+            self.dismiss(animated: true, completion: nil)
         }
         
-        segment.isHidden = true
-        segment.isEnabled = false
-        actionButton.isEnabled = false
-        colorizeButton.isEnabled = true
-        self.dismiss(animated: true, completion: nil)
+        if mediaType.isEqual(to: kUTTypeMovie as String) {
+            movieUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL
+            movieSelected = true
+            movieBar.isHidden = false
+        }
     }
     
     /**
@@ -112,4 +155,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+
+    // https://stackoverflow.com/questions/42665271/swift-get-all-frames-from-video
+    func getAllFrames() {
+        let asset:AVAsset = AVAsset(url: movieUrl)
+        self.duration = CMTimeGetSeconds(asset.duration)
+        
+        self.generator = AVAssetImageGenerator(asset:asset)
+        self.generator.appliesPreferredTrackTransform = true
+        self.frames = []
+        
+        for index in stride(from: 0, to: self.duration, by: 0.25) {
+            self.getFrame(fromTime:Float64(index))
+        }
+                
+        self.generator = nil
+    }
+    
+    // https://stackoverflow.com/questions/42665271/swift-get-all-frames-from-video
+    private func getFrame(fromTime:Float64) {
+        let time:CMTime = CMTimeMakeWithSeconds(fromTime, preferredTimescale:600)
+        let image:CGImage
+        do {
+            try image = self.generator.copyCGImage(at:time, actualTime:nil)
+        } catch {
+            return
+        }
+        self.frames.append(UIImage(cgImage:image))
+    }
+    
 }

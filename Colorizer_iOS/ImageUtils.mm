@@ -52,9 +52,9 @@ using namespace cv::dnn;
     
     // Check if image is grayscale or "grayscale" (actually color), and convert to BGR.
     if (mat.channels() == 1) {
-        cvtColor(mat, mat, CV_GRAY2BGR);
+        cv::cvtColor(mat, mat, CV_GRAY2BGR);
     } else if (mat.channels() == 4) {
-        cvtColor(mat, mat, CV_BGRA2BGR);
+        cv::cvtColor(mat, mat, CV_BGRA2BGR);
     }
 }
 
@@ -98,36 +98,36 @@ using namespace cv::dnn;
     
     // setup additional layers:
     int sz[] = {2, 313, 1, 1};
-    Mat pts_in_hull(4, sz, CV_32F, hull_pts);
-    Ptr<dnn::Layer> class8_ab = net.getLayer("class8_ab");
+    cv::Mat pts_in_hull(4, sz, CV_32F, hull_pts);
+    cv::Ptr<dnn::Layer> class8_ab = net.getLayer("class8_ab");
     class8_ab->blobs.push_back(pts_in_hull);
-    Ptr<dnn::Layer> conv8_313_rh = net.getLayer("conv8_313_rh");
+    cv::Ptr<dnn::Layer> conv8_313_rh = net.getLayer("conv8_313_rh");
     conv8_313_rh->blobs.push_back(Mat(1, 313, CV_32F, Scalar(2.606)));
     
     // extract L channel and subtract mean
-    Mat lab, L, input;
+    cv::Mat lab, L, input;
     mat.convertTo(mat, CV_32F, 1.0 / 255);
-    cvtColor(mat, lab, COLOR_BGR2Lab);
-    extractChannel(lab, L, 0);
-    resize(L, input, cv::Size(W_in, H_in));
+    cv::cvtColor(mat, lab, COLOR_BGR2Lab);
+    cv::extractChannel(lab, L, 0);
+    cv::resize(L, input, cv::Size(W_in, H_in));
     input -= 50;
     
     // run the L channel through the network
-    Mat inputBlob = blobFromImage(input);
+    cv::Mat inputBlob = blobFromImage(input);
     net.setInput(inputBlob);
-    Mat result = net.forward();
+    cv::Mat result = net.forward();
     
     // retrieve the calculated a,b channels from the network output
     cv::Size siz(result.size[2], result.size[3]);
-    Mat a = Mat(siz, CV_32F, result.ptr(0, 0));
-    Mat b = Mat(siz, CV_32F, result.ptr(0, 1));
-    resize(a, a, mat.size());
-    resize(b, b, mat.size());
+    cv::Mat a = Mat(siz, CV_32F, result.ptr(0, 0));
+    cv::Mat b = Mat(siz, CV_32F, result.ptr(0, 1));
+    cv::resize(a, a, mat.size());
+    cv::resize(b, b, mat.size());
     
     // merge, and convert back to RGB
-    Mat color, chn[] = {L, a, b};
-    merge(chn, 3, lab);
-    cvtColor(lab, color, COLOR_Lab2RGB);
+    cv::Mat color, chn[] = {L, a, b};
+    cv::merge(chn, 3, lab);
+    cv::cvtColor(lab, color, COLOR_Lab2RGB);
     
     color.convertTo(color, CV_8UC4, 255);
     
