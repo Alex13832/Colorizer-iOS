@@ -1,12 +1,14 @@
 Colorizer iOS
 ===============
 
-Source code for image colorizing in iOS. 
+This is a project for adding color to black-and-white photos and animations. "Colorizer" is a tool that can process black-and-white media and add color to them. The colorizer tool is an app made in Swift and Objective-C++ for iOS devices. It's a rather simple thing to convert color photos to grayscale photos, but to do reverse process needs more sophisticated techniques. In this project, a pre-trained Convolutional-Neural-Network (CNN) model is used to go from grayscale to color photos.
 
 ## Background
-A really impressive project where grayscale images were transformed into color images was found at the [OpenCV example section](https://docs.opencv.org/3.4/d6/d39/samples_2dnn_2colorization_8cpp-example.html).
+This project is partly based on the OpenCV example found [here](https://docs.opencv.org/3.4/d6/d39/samples_2dnn_2colorization_8cpp-example.html).
 
-To transform grayscale images into color images OpenCV use a Deep Neural Network model, trained in Caffe. OpenCV can read and use these models. The model was trained by Richard Zhang at the university of Berkely. More information [here](http://richzhang.github.io/colorization/) and in this Bibtex:
+The example is based on a University of Berkeley research project where Zhang et al. trained a CNN model for converting grayscale images to color images. The model was trained using the Caffe framework, which output models the OpenCV framework can handle.
+
+For more information, please visit the research [webpage](http://richzhang.github.io/colorization/) and this Bibtex:
 
 ```
 @inproceedings{zhang2016colorful,
@@ -17,24 +19,22 @@ To transform grayscale images into color images OpenCV use a Deep Neural Network
 }
 ```
 
-The code was rewritten for Objective-C++ and Swift and an app was made. When developing the app the goal was to produce a simple UI that takes an input image and then transforms it to a color image.
+A little tweaking of the example code was needed to make it compatible for iOS devices. The user interface is made in Swift and Apple's design tools in Xcode.
 
 ## Dependencies
-The app depends on OpenCV. It should be straightforward to add the OpenCV library to Xcode. The code that depend on OpenCV is Objective-C++ (.mm). There is a bridging-header provided not to expose C++ code to Swift.
-
-Due to OpenCV's size, the framework was not pushed to this repository. Download it from [here](https://opencv.org/releases/), in this project `OpenCV-3.4.9` is used. Unzip `opencv2.framework.zip`, drag it to Xcode and select "Copy items if needed". The app should work with previous releases, which may reduce the app size.
+The app cannot run without OpenCV. Luckily, there's a OpenCV module for iOS. However, the module is too large for Git so you need to download it from [here](https://opencv.org/releases/). Download a module of version 3.4.9 or higher. After downloading the package, unzip it and place it insde the Xcode project, see the pictures below.
 
 <img src="./images/opencv.png" width="1000"/>
 
-To make Xcode understand that the framework exists, see the images below:
-
 <img src="./images/opencv1.png" width="1000"/>
+
 <img src="./images/opencv2.png" width="1000"/>
 
-Finally, the Caffe-model has to be downloaded. [Clone this repository](https://github.com/richzhang/colorization#representation-learning-centric-functionality) and run `./models/fetch_release_models.sh` inside that repo. Find `colorization_release_v2.caffemodel` and put it in the root of `Colorizer-iOS`, tick "Copy items if needed".
+Finally, the Caffe-model files have to be downloaded from [this link](https://www.icloud.com/iclouddrive/0N0bxC_gCVqD4vgyLkAtL-w6Q#models). Unzip the downloaded file and copy `colorization_release_v2.caffemodel` and `colorization_deploy_v2.prototxt` and put them in the root of `Colorizer-iOS` in Xcode, choose "Copy items if needed" and "Add to targets -> Colorizer_iOS". Now, the project should be ready to run.
+
+<img src="./images/options.png" width="500"/>
 
 ## Interface
-To scan and crop photos with the built in camera is out of the scope for this app. There are other apps available in the App Store for that purpose, [PhotoScan by Google Photos](https://apps.apple.com/us/app/photoscan-by-google-photos/id1165525994) for instance.
 
 ### Main interface
 Tap on the screen to open the camera roll and choose a photo. The arrow becomes green and the photo can now be colorized. A colorized image will be shown and the share button becomes green, the image can now be saved. To compare the result and the input, there is a segment button go go between these.
@@ -70,6 +70,15 @@ Tap on the screen to open the camera roll and choose a photo. The arrow becomes 
   <img src="./images/example4_gray.png" width="300" />
   <img src="./images/example4_color.png" width="300" /> 
 </p>
+
+## Animations
+The app can take black-and-white films and make an animations by sampling images from the movie. Since it takes a long time to convert a batch of grayscale images to color images, it's not recommended to choose too big films. The example below took approximately 17 s. to generate, the orginal film is 13 s long. 52 frames were sampled, which means that every frame takes around 0.33 s to computer when using the Xcode iPhone emulator.
+
+<img src="./images/high_noon.gif" width="300" />
+
+## Future work
+* Improve animations.
+* Speed up computations to generate animations faster.
 
 ## Donations
 
