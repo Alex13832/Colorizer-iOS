@@ -18,6 +18,7 @@
 		11C05B3423BA5D2B0039A45D /* colorization_deploy_v2.prototxt in Resources */ = {isa = PBXBuildFile; fileRef = 11C05B3223BA5D250039A45D /* colorization_deploy_v2.prototxt */; };
 		11C05B3523BA5D2B0039A45D /* colorization_release_v2.caffemodel in Resources */ = {isa = PBXBuildFile; fileRef = 11C05B3323BA5D2B0039A45D /* colorization_release_v2.caffemodel */; };
 		11C05B4623BB86A50039A45D /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C05B4523BB86A50039A45D /* opencv2.framework */; };
+		11EEDC022557FAB7005409A4 /* colorization_release_v2_norebal.caffemodel in Resources */ = {isa = PBXBuildFile; fileRef = 11EEDC012557FAB7005409A4 /* colorization_release_v2_norebal.caffemodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		11C05B3223BA5D250039A45D /* colorization_deploy_v2.prototxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = colorization_deploy_v2.prototxt; sourceTree = "<group>"; };
 		11C05B3323BA5D2B0039A45D /* colorization_release_v2.caffemodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = colorization_release_v2.caffemodel; sourceTree = "<group>"; };
 		11C05B4523BB86A50039A45D /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		11EEDC012557FAB7005409A4 /* colorization_release_v2_norebal.caffemodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = colorization_release_v2_norebal.caffemodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				11C05B3223BA5D250039A45D /* colorization_deploy_v2.prototxt */,
 				11C05B3323BA5D2B0039A45D /* colorization_release_v2.caffemodel */,
+				11EEDC012557FAB7005409A4 /* colorization_release_v2_norebal.caffemodel */,
 				11C05B1123BA55070039A45D /* Colorizer_iOS */,
 				11C05B1023BA55070039A45D /* Products */,
 			);
@@ -148,6 +151,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11EEDC022557FAB7005409A4 /* colorization_release_v2_norebal.caffemodel in Resources */,
 				11C05B1F23BA550A0039A45D /* LaunchScreen.storyboard in Resources */,
 				11C05B3423BA5D2B0039A45D /* colorization_deploy_v2.prototxt in Resources */,
 				11C05B3523BA5D2B0039A45D /* colorization_release_v2.caffemodel in Resources */,
