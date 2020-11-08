@@ -74,7 +74,7 @@ Tap on the screen to open the camera roll and choose a photo. The arrow becomes 
 </p>
 
 ## Animations
-The app can take black-and-white films and make an animations by sampling images from the movie. Since it takes a long time to convert a batch of grayscale images to color images, it's not recommended to choose too big films. The example below took approximately 17 s. to generate, the orginal film is 13 s long. 52 frames were sampled, which means that every frame takes around 0.33 s to computer when using the Xcode iPhone emulator.
+The app can take black-and-white films and make an animations by sampling images from the movie. Since it takes a long time to convert a batch of grayscale images to color images, it's not recommended to choose too big films. The example below took approximately 17 s. to generate, the orginal film is 13 s long. 52 frames were sampled, which means that every frame takes around 0.33 s to compute when using the Xcode iPhone emulator.
 
 <img src="./images/high_noon.gif" width="300" />
 
