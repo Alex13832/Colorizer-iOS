@@ -5,6 +5,11 @@ Colorizer iOS
 
 This is a project for adding color to black-and-white photos and animations. "Colorizer" is a tool that can process black-and-white media and add color to them. The colorizer tool is an app made in Swift and Objective-C++ for iOS devices. It's a rather simple thing to convert color photos to grayscale photos, but to do reverse process needs more sophisticated techniques. In this project, a pre-trained Convolutional-Neural-Network (CNN) model is used to go from grayscale to color photos.
 
+<p float="left">
+  <img src="./images/example1_gray.png" width="300" />
+  <img src="./images/example1_color.png" width="300" /> 
+</p>
+
 ## Background
 This project is partly based on the OpenCV example found [here](https://docs.opencv.org/3.4/d6/d39/samples_2dnn_2colorization_8cpp-example.html).
 
@@ -52,11 +57,6 @@ Tap on the screen to open the camera roll and choose a photo. The arrow becomes 
 
 
 ## Examples
-
-<p float="left">
-  <img src="./images/example1_gray.png" width="300" />
-  <img src="./images/example1_color.png" width="300" /> 
-</p>
 
 <p float="left">
   <img src="./images/example2_gray.png" width="300" />
