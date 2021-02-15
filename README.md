@@ -29,7 +29,7 @@ For more information, please visit the research [webpage](http://richzhang.githu
 A little tweaking of the example code was needed to make it compatible for iOS devices. The user interface is made in Swift and Apple's design tools in Xcode.
 
 ## Dependencies
-The app cannot run without OpenCV. Luckily, there's a OpenCV module for iOS. However, the module is too large for Git so you need to download it from [here](https://opencv.org/releases/). Download a module of version 3.4.9 or higher. After downloading the package, unzip it and place it insde the Xcode project, see the pictures below.
+The app cannot run without OpenCV. Luckily, there's a OpenCV module for iOS. However, the module is too large for Git so you need to download it from [here](https://opencv.org/releases/). Download a module of version 3.4.9 or higher. After downloading the package, unzip it and place it inside the Xcode project, see the pictures below.
 
 <img src="./images/opencv.png" width="1000"/>
 
@@ -74,7 +74,7 @@ Tap on the screen to open the camera roll and choose a photo. The arrow becomes 
 </p>
 
 ## Animations
-The app can take black-and-white films and make an animations by sampling images from the movie. Since it takes a long time to convert a batch of grayscale images to color images, it's not recommended to choose too big films. The example below took approximately 17 s. to generate, the orginal film is 13 s long. 52 frames were sampled, which means that every frame takes around 0.33 s to compute when using the Xcode iPhone emulator.
+The app can take black-and-white films and make an animations by sampling images from the movie. Since it takes a long time to convert a batch of grayscale images to color images, it's not recommended to choose too big films. The example below took approximately 17 s. to generate, the original film is 13 s long. 52 frames were sampled, which means that every frame takes around 0.33 s to compute when using the Xcode iPhone emulator.
 
 <img src="./images/high_noon.gif" width="300" />
 
